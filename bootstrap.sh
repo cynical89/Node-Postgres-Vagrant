@@ -30,7 +30,7 @@ systemctl start postgresql
 
 sed -i "s/#listen_address.*/listen_addresses = '*'/" /etc/postgresql/10/main/postgresql.conf
 
-cat >> /etc/postgresql/9.1/main/pg_hba.conf <<EOF
+cat >> /etc/postgresql/10/main/pg_hba.conf <<EOF
 # Accept all IPv4 connections - FOR DEVELOPMENT ONLY!!!
 host    all         all         0.0.0.0/0             md5
 EOF
