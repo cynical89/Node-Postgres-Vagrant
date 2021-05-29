@@ -53,7 +53,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     end
   end
 
-  config.vm.provision "shell", path: "bootstrap.sh", privileged: true
+  config.vm.provision "shell", path: "config/bootstrap.sh", privileged: true
 
   config.vm.provision "shell", run: "always", inline: <<-SHELL
     pm2 restart 0

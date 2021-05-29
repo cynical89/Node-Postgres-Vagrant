@@ -39,7 +39,21 @@ systemctl restart postgresql
 
 sudo su postgres -c "psql -c \"CREATE ROLE vagrant SUPERUSER LOGIN PASSWORD 'vagrant'\" "
 
-sudo su postgres -c "createdb -E UTF8 -T template0 --locale=en_US.utf8 -O vagrant twitchclone"
+sudo su postgres -c "createdb -E UTF8 -T template0 --locale=en_US.utf8 -O vagrant nodedb"
+
+echo -e "\n\n====================================================="
+echo -e "\t Installing NGINX"
+echo -e "=====================================================\n\n"
+
+apt-get -y install nginx
+systemctl enable nginx
+systemctl start nginx
+
+cp /vagrant/config/nginx/nodeapp.conf /etc/nginx/sites-available/nodeapp
+ln -s /etc/nginx/sites-available/nodeapp /etc/nginx/sites-enabled/nodeapp
+
+rm /etc/nginx/sites-enabled/default
+systemctl restart nginx
 
 echo -e "\n\n====================================================="
 echo -e "\t Installing NPM Packages"
@@ -53,8 +67,7 @@ echo -e "\t Adding project to PM2"
 echo -e "=====================================================\n\n"
 
 # commented out for making things run on staging build - the hot reload works better this way
-# pm2 start yarn --name "Clutch" -- start
-pm2 start yarn --name "Clutch" -- run staging-dev
+pm2 start yarn --name "Node-Postgres" -- start
 pm2 save
 pm2 startup
 pm2 stop 0
